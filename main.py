@@ -37,14 +37,12 @@ def post_route():
             if datetime_valid(data["time"]):
                 data["reading"] = convert_temp(data["reading"])
                 data_list.append(data)
-                return data_list
+                return jsonify(data_list)
             return {"error": "Time must be in ISO8601 format!"}, 415
         return {"error": "Value-Type not supported!"}, 415
     return {"error": "Content-Type not supported!"}, 415
 
 
-# http://localhost:8080/readings?room=kitchen&since=20220927T130000Z&until=20220927T140000Z
-# http://localhost:8080/readings/kitchen/20220927T152159Z/20220927T152159Z
 # TODO 4: APP GET with basic statistics
 @app.get("/readings/<room>/<since>/<until>")
 def get_data(room, since, until):
