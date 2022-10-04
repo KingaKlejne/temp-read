@@ -13,5 +13,5 @@ curl \
 ```
  Once you’ll input the data you can gather basic statistics such as maximum and minimum values of provided samples, but also mean, median and number of samples for specific room location. To run it use curl command as present below. The following parts after '/' refers to ".../room/since/until"
 ```
-http://localhost:8080/readings/kitchen/20220927T152159Z/20220927T152159Z
+curl http://localhost:8080/readings/kitchen/20220927T152159Z/20220927T152159Z
 ```
