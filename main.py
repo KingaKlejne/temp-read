@@ -1,12 +1,9 @@
 from flask import Flask, request, jsonify
 import re
 import statistics
-import sqlite3
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
-data_list = []
-searched_data = []
 
 # TODO 1: Create Flask App
 app = Flask(__name__)
@@ -30,6 +27,7 @@ class Readings(db.Model):
 db.create_all()
 
 # TODO 2: ISO8601 formatting
+# Next: to update
 regex = r'^(-?(?:[1-9][0-9]*)?[0-9]{4})(1[0-2]|0[1-9])(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9])([0-5][0-9])' \
         r'([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9])[0-5][0-9])?$'
 match_iso8601 = re.compile(regex).match
@@ -49,40 +47,35 @@ def convert_temp(temp):
 def post_route():
     try:
         data = request.get_json()
+        if not isinstance(data["reading"], int) or not isinstance(data["time"], str) \
+                or not isinstance(data["label"], str):
+            return {"error": "Value-Type not supported!"}, 400
+        if not datetime_valid(data["time"]):
+            return {"error": "Time must be in ISO8601 format!"}, 400
         place = data['label'].split(",")
         data["reading"] = convert_temp(data["reading"])
         new_reading = Readings(time=data['time'], room=place[0], location=place[1], reading=data['reading'])
         db.session.add(new_reading)
         db.session.commit()
-        if not isinstance(data["reading"], int) and not isinstance(data["time"], str) and not isinstance(data["label"],
-                                                                                                         str):
-            return {"error": "Value-Type not supported!"}, 400
-        if not datetime_valid(data["time"]):
-            return {"error": "Time must be in ISO8601 format!"}, 400
-        data_list.append(data)
-        return jsonify(data_list)
+        return {"Success": "The request has succeeded."}, 200
     except TypeError:
         return {"error": "Content-Type not supported!"}, 415
 
 
 # TODO 5: APP GET with basic statistics
-@app.get("/readings/<room>/<since>/<until>")
-def get_data(room, since, until):
-    global data_list
-    since = datetime.strptime(since, '%Y%m%dT%H%M%SZ')
-    until = datetime.strptime(until, '%Y%m%dT%H%M%SZ')
-    for i in data_list:
-        if room in i["label"]:
-            i["time"] = datetime.strptime(i["time"], '%Y%m%dT%H%M%SZ')
-            if since <= i["time"] <= until:
-                searched_data.append(i["reading"])
-    if len(searched_data) > 0:
+# Next: What if user provide only room or only location?
+@app.get("/readings/<room>/<location>/<since>/<until>")
+def get_data(room, location, since, until):
+    readings = Readings.query.where(Readings.time <= until, Readings.time >= since, Readings.room == room,
+                                    Readings.location == location).all()
+    temp_read = [row.reading for row in readings]
+    if len(temp_read) > 0:
         sensors_statistics = {
-            "samples": len(searched_data),
-            "min": min(searched_data),
-            "max": max(searched_data),
-            "median": statistics.median(searched_data),
-            "mean": statistics.mean(searched_data)
+            "samples": len(temp_read),
+            "min": min(temp_read),
+            "max": max(temp_read),
+            "median": statistics.median(temp_read),
+            "mean": statistics.mean(temp_read)
         }
         return jsonify(sensors_statistics)
     else:
