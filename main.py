@@ -16,10 +16,7 @@ match_iso8601 = re.compile(regex).match
 
 
 def datetime_valid(dt_str):
-    if match_iso8601(dt_str) is not None:
-        return True
-    else:
-        return False
+    return match_iso8601(dt_str) is not None
 
 
 # TODO 3: Converting Fahrenheit to Celsius
@@ -27,23 +24,24 @@ def convert_temp(temp):
     return round((temp - 32) / 1.8, 2)
 
 
-# TODO 3: APP POST
+# TODO 4: APP POST
 @app.post('/readings')
 def post_route():
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    try:
         data = request.get_json()
-        if isinstance(data["reading"], int) and isinstance(data["time"], str) and isinstance(data["label"], str):
-            if datetime_valid(data["time"]):
-                data["reading"] = convert_temp(data["reading"])
-                data_list.append(data)
-                return jsonify(data_list)
-            return {"error": "Time must be in ISO8601 format!"}, 415
-        return {"error": "Value-Type not supported!"}, 415
-    return {"error": "Content-Type not supported!"}, 415
+        if not isinstance(data["reading"], int) and not isinstance(data["time"], str) and not isinstance(data["label"],
+                                                                                                         str):
+            return {"error": "Value-Type not supported!"}, 400
+        if not datetime_valid(data["time"]):
+            return {"error": "Time must be in ISO8601 format!"}, 400
+        data["reading"] = convert_temp(data["reading"])
+        data_list.append(data)
+        return jsonify(data_list)
+    except TypeError:
+        return {"error": "Content-Type not supported!"}, 415
 
 
-# TODO 4: APP GET with basic statistics
+# TODO 5: APP GET with basic statistics
 @app.get("/readings/<room>/<since>/<until>")
 def get_data(room, since, until):
     global data_list
@@ -64,10 +62,10 @@ def get_data(room, since, until):
         }
         return jsonify(sensors_statistics)
     else:
-        return "No data for this room"
+        return {"error": "No data for this room"}, 503
 
 
-# TODO 5: Run App
+# TODO 6: Run App
 if __name__ == "__main__":
-    # app.debug = True
+    app.debug = True
     app.run(port=8080)
