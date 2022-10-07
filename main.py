@@ -63,11 +63,15 @@ def post_route():
 
 
 # TODO 5: APP GET with basic statistics
-# Next: What if user provide only room or only location?
-@app.get("/readings/<room>/<location>/<since>/<until>")
-def get_data(room, location, since, until):
-    readings = Readings.query.where(Readings.time <= until, Readings.time >= since, Readings.room == room,
-                                    Readings.location == location).all()
+@app.get("/readings")
+def get_data():
+    room = request.args.get("room")
+    location = request.args.get("location")
+    since = request.args.get("since")
+    until = request.args.get("until")
+    readings = Readings.query\
+        .where(Readings.time <= until, Readings.time >= since)\
+        .where((Readings.room == room) | (Readings.location == location))
     temp_read = [row.reading for row in readings]
     if len(temp_read) > 0:
         sensors_statistics = {
