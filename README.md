@@ -15,5 +15,5 @@ curl \
  
  To get the statistics use curl command as present below. The following parts after '/' refers to ".../room/since/until"
 ```
-curl http://localhost:8080/readings/kitchen/20220927T152159Z/20220927T152159Z
+curl "http://localhost:8080/readings?room=kitchen&since=20220927T152159Z&until=20220927T152159Z"
 ```
