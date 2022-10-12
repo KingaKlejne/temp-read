@@ -1,19 +1,80 @@
 # temp-read
 
-Temp-read is a simple Flask application to insert temperature readings from different sensors at home and display basic statistics.
+Temp-read is a Flask API application allowing to insert temperature readings from different sensors at home and displaing basic statistics for specific locations. All data are storage in the SQL database, hence they are accessible even when server is down.
 
-### How to use
-To use the application run it on your local computer. It will run a local server to which you may insert the data running curl command in your Terminal like in the example below. Remember that data needs to be provided in the json format only. "time" and "label" needs to be string and "time" needs to be provided in  ISO8601 format. Furthermore, "reading" is a temperature value in Farenheit which must be provided as an integer.
+## Installation
+
+Install with pip:
+
 ```
-curl \
+$ pip install -r requirements.txt
+```
+
+## Run Flask
+
+```
+$ python main.py
+```
+In Flask, Default port is `5000`
+
+Swagger document page:  `http://127.0.0.1:5000/readings`
+
+## POST Data
+Requirements:
+- Data must be provided as json file, with the following variables:
+- time: string in ISO8601 format
+- label: string provided as room and location where the sensor is located with no additional comma between, i.e.  "label": "garage,window"
+- reading: float, temperature reading provided in Farenheit (while uploading to database it will be converted to Celsius)
+
+### How to input data?
+Run curl command as in the example below.
+
+```
+$ curl \
       --request POST \
       --header "Content-Type: application/json" \
       --data '{"time": "20220927T152159Z", "label": "kitchen,window", "reading": 68}' \
-      http://localhost:8080/readings
+      http://localhost:5000/readings
 ```
- Once you’ll input the data you can gather basic statistics such as maximum and minimum values of provided samples, but also mean, median and number of samples for specific room location. The numbers may be different to what you expect as at this point the temperature readings are changed to Celsius. 
- 
- To get the statistics use curl command as present below. The following parts after '/' refers to ".../room/since/until"
+Or connect to API through Python file as in the example below:
+
 ```
-curl "http://localhost:8080/readings?room=kitchen&since=20220927T152159Z&until=20220927T152159Z"
+import requests
+
+data = {"time": "2022-09-12T17:47:03Z", "label": "garage,window", "reading": 69}
+response = requests.post('http://localhost:5000/readings', json=data)
 ```
+
+## GET Data
+
+Get request is providing simple statistics for the selected room and/or location such as listed below in dictionary format. 
+- total number of samples
+- minimum value of temperatures
+- maximum value of temperatures
+- median value of temperatures
+- mean value of temperatures
+
+To get data you must provide room and or location along with since and until time.
+
+### How to get data?
+Run curl command as any of the examples below.
+```
+$ curl "http://localhost:8080/readings?room=kitchen&since=20220927T152159Z&until=20220927T152159Z"
+$ curl "http://localhost:5000/readings?room=bedroom&location=floor&since=2022-08-20T20:00:00&until=2022-10-13T20:00:00"
+```
+Or connect to API through Python file as in the example below:
+```
+response = requests.get("http://localhost:5000/readings?room=bedroom&since=2022-08-20T20:00:00&until=2022-10-13T20:00:00")
+```
+
+## Run tests
+```
+$ pytest test.py
+```
+
+## Reference
+
+Offical Websites
+
+- [Flask](http://flask.pocoo.org/)
+- [Flask-SQLalchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/)
