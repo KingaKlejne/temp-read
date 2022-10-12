@@ -59,7 +59,7 @@ To get data you must provide room and or location along with since and until tim
 ### How to get data?
 Run curl command as any of the examples below.
 ```
-$ curl "http://localhost:8080/readings?room=kitchen&since=20220927T152159Z&until=20220927T152159Z"
+$ curl "http://localhost:5000/readings?room=kitchen&since=20220927T152159Z&until=20220927T152159Z"
 $ curl "http://localhost:5000/readings?room=bedroom&location=floor&since=2022-08-20T20:00:00&until=2022-10-13T20:00:00"
 ```
 Or connect to API through Python file as in the example below:
