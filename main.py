@@ -4,6 +4,8 @@ import statistics
 from flask_sqlalchemy import SQLAlchemy
 from dateutil.parser import parse
 from dateutil.parser import ParserError
+from werkzeug.exceptions import HTTPException
+import sqlalchemy
 
 # TODO 1: Create Flask App
 app = Flask(__name__)
@@ -57,35 +59,38 @@ def post_route() -> tuple[dict[str, str], int]:
         db.session.add(new_reading)
         db.session.commit()
         return {"Success": "The request has succeeded."}, 200
-    except TypeError:
+    except (TypeError, HTTPException):
         return {"error": "Content-Type not supported!"}, 415
 
 
 # TODO 5: APP GET with basic statistics
 @app.get("/readings")
 def get_data() -> tuple[dict[str, Any], int]:
-    room = request.args.get("room")
-    location = request.args.get("location")
-    since = request.args.get("since")
-    until = request.args.get("until")
-    readings = Readings.query \
-        .where(Readings.time <= until, Readings.time >= since) \
-        .where((Readings.room == room) | (Readings.location == location))
-    temp_read = [row.reading for row in readings]
-    if len(temp_read) > 0:
-        sensors_statistics = {
-            "samples": len(temp_read),
-            "min": round(min(temp_read), 2),
-            "max": round(max(temp_read), 2),
-            "median": round(statistics.median(temp_read), 2),
-            "mean": round(statistics.mean(temp_read), 2),
-        }
-        return {"Success": sensors_statistics}, 200
-    else:
-        return {"error": "No data for this room"}, 503
+    try:
+        room = request.args.get("room")
+        location = request.args.get("location")
+        since = request.args.get("since")
+        until = request.args.get("until")
+        readings = Readings.query \
+            .where(Readings.time <= until, Readings.time >= since) \
+            .where((Readings.room == room) | (Readings.location == location))
+        temp_read = [row.reading for row in readings]
+        if len(temp_read) > 0:
+            sensors_statistics = {
+                "samples": len(temp_read),
+                "min": round(min(temp_read), 2),
+                "max": round(max(temp_read), 2),
+                "median": round(statistics.median(temp_read), 2),
+                "mean": round(statistics.mean(temp_read), 2),
+            }
+            return {"Success": sensors_statistics}, 200
+        else:
+            return {"error": "No data for this room"}, 503
+    except sqlalchemy.exc.ArgumentError:
+        return {"error": "Not valid URL"}, 404
 
 
 # TODO 6: Run App
 if __name__ == "__main__":
     app.debug = True
-    app.run(port=8080)
+    app.run()
