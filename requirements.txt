@@ -23,3 +23,6 @@ zipp @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_66c2c
 
 flask~=2.2.2
 python-dateutil~=2.8.2
+sqlalchemy~=1.4.41
+werkzeug~=2.2.2
+pytest~=7.1.2
