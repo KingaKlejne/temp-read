@@ -1,28 +1,62 @@
-certifi @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4d2o0arbv6/croot/certifi_1665076671099/work/certifi
-click @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_croot-quwchbn8/click_1646123324461/work
-Flask @ file:///home/conda/feedstock_root/build_artifacts/flask_1660054669620/work
-Flask-SQLAlchemy @ file:///home/conda/feedstock_root/build_artifacts/flask-sqlalchemy_1664913319072/work
-greenlet @ file:///Users/ktietz/demo/mc3/conda-bld/greenlet_1628721647727/work
-importlib-metadata @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_croot-5pqd2z6f/importlib-metadata_1648710902288/work
-itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
-Jinja2 @ file:///opt/conda/conda-bld/jinja2_1647436528585/work
-MarkupSafe @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_12c133f5-0720-4727-9c18-599a3af825723lzwham3/croots/recipe/markupsafe_1654597866058/work
-mypy @ file:///Users/runner/miniforge3/conda-bld/mypy_1664921969196/work
-mypy-extensions==0.4.3
-psutil @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_1310b568-21f4-4cb0-b0e3-2f3d31e39728k9coaga5/croots/recipe/psutil_1656431280844/work
-pysqlite3 @ file:///home/conda/feedstock_root/build_artifacts/pysqlite3_1625598615064/work
-python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
-six @ file:///tmp/build/80754af9/six_1644875935023/work
-SQLAlchemy @ file:///Users/runner/miniforge3/conda-bld/sqlalchemy_1662536381158/work
-sqlalchemy-stubs @ file:///home/conda/feedstock_root/build_artifacts/sqlalchemy-stubs_1621064422918/work
-tomli @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_d0e5ffbf-5cf1-45be-8693-c5dff8108a2awhthtjlq/croots/recipe/tomli_1657175508477/work
-types-python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/types-python-dateutil_1658235419240/work
-typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1665144421445/work
-Werkzeug @ file:///home/conda/feedstock_root/build_artifacts/werkzeug_1660053523487/work
-zipp @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_66c2c5f2-5dd5-4946-a16a-72af650ebd6cnmz4ou0f/croots/recipe/zipp_1652343960956/work
-
-flask~=2.2.2
-python-dateutil~=2.8.2
-sqlalchemy~=1.4.41
-werkzeug~=2.2.2
-pytest~=7.1.2
+attrs=21.4.0
+brotlipy=0.7.0
+bzip2=1.0.8
+ca-certificates=2022.07.19
+certifi=2022.9.24
+cffi=1.15.1
+charset-normalizer=2.0.4
+click=8.0.4
+cryptography=37.0.1
+flake8=5.0.4
+flask=2.2.2
+flask-sqlalchemy=3.0.0
+greenlet=1.1.0
+idna=3.3
+importlib-metadata=4.11.3
+iniconfig=1.1.1
+itsdangerous=2.0.1
+jinja2=3.0.3
+libcxx=14.0.6
+libffi=3.4.2
+libzlib=1.2.12
+markupsafe=2.1.1
+mccabe=0.7.0
+mypy=0.982
+mypy_extensions=0.4.3
+ncurses=6.3
+openssl=1.1.1q
+packaging=21.3
+pip=22.2.2
+pluggy=1.0.0
+psutil=5.9.0
+py=1.11.0
+pycodestyle=2.9.1
+pycparser=2.21
+pyflakes=2.5.0
+pyopenssl=22.0.0
+pyparsing=3.0.9
+pysocks=1.7.1
+pysqlite3=0.4.6
+pytest=7.1.2
+python=3.9.13
+python-dateutil=2.8.2
+python_abi=3.9
+readline=8.1.2
+requests=2.28.1
+setuptools=63.4.1
+six=1.16.0
+sqlalchemy=1.4.41
+sqlalchemy-stubs=0.4
+sqlite=3.39.3
+tk=8.6.12
+tomli=2.0.1
+types-python-dateutil=2.8.19
+typing-extensions=4.4.0
+typing_extensions=4.4.0
+tzdata=2022c
+urllib3=1.26.11
+werkzeug=2.2.2
+wheel=0.37.1
+xz=5.2.6
+zipp=3.8.0
+zlib=1.2.12

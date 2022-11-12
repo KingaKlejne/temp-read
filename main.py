@@ -2,7 +2,7 @@ from typing import Any
 from flask import Flask, request
 import statistics
 from flask_sqlalchemy import SQLAlchemy
-from dateutil.parser import parse
+from dateutil.parser import isoparse
 from dateutil.parser import ParserError
 from werkzeug.exceptions import HTTPException
 import sqlalchemy
@@ -31,7 +31,7 @@ with app.app_context():
 
 # TODO 2: ISO8601 formatting
 def datetime_valid(dt_str: str) -> str:
-    return str(parse(dt_str))
+    return str(isoparse(dt_str))
 
 
 # TODO 3: Converting Fahrenheit to Celsius
@@ -44,13 +44,15 @@ def convert_temp(temp: float) -> float:
 def post_route() -> tuple[dict[str, str], int]:
     try:
         data = request.get_json()
-        if not isinstance(data["reading"], int) \
-                or not isinstance(data["time"], str) \
-                or not isinstance(data["label"], str):
+        if (
+            not isinstance(data["reading"], int)
+            or not isinstance(data["time"], str)
+            or not isinstance(data["label"], str)
+        ):
             return {"error": "Value-Type not supported!"}, 400
         try:
             iso_time = datetime_valid(data["time"])
-        except ParserError:
+        except (ParserError, ValueError):
             return {"error": "Time must be in ISO8601 format!"}, 400
         place = data['label'].split(",")
         temp_c = convert_temp(data["reading"])
